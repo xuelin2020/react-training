@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, hasKey }) => {
     return (
         <ul>
             {todos.map((todo) => (
-                <TodoItem
-                    key={todo.id}
-                    todo={todo} />
+                hasKey ? <TodoItem key={todo.id} todo={todo}/> : <TodoItem todo={todo}/>
             ))}
         </ul>
     );
@@ -35,17 +33,24 @@ const App = () => {
     ];
 
     const [todos, setTodos] = useState(initialTodos);
+    const [hasKey, setHasKey] = useState(true)
 
     const handleReorder = () => {
         const shuffledTodos = [...todos];
         shuffledTodos.sort(() => Math.random() - 0.5); // 随机排序
         setTodos(shuffledTodos);
+
     };
+    const handleKey = () => {
+        setHasKey(!hasKey)
+    }
 
     return (
         <div>
             <button onClick={handleReorder}>重新排序</button>
-            <TodoList todos={todos} />
+            {' '}
+            <button onClick={handleKey} style={{background: hasKey ? "green" : 'red'}}>设置key</button>
+            <TodoList todos={todos} hasKey={hasKey} />
         </div>
     );
 };
